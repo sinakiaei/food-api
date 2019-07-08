@@ -6,40 +6,32 @@ This application can be used to retrieve various food options from the database 
 
 Before starting, ensure that you have a recent version of:
 
-* [Node.js.][CS]
-
-[CS]: https://nodejs.org/en/
-
-* [PostgreSQL][CS]
-
-[CS]: https://www.postgresql.org/
-
-### What is a Nodejs?
-
-Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient, perfect for data-intensive real-time applications that run across distributed devices. Node.js is an open-source, cross-platform runtime environment for developing server-side and networking applications.
-
-### What is meant by PostgreSQL?
-
-PostgreSQL (pronounced "post-gress-Q-L") is an open-source relational database management system ( DBMS ) developed by a worldwide team of volunteers. PostgreSQL is not controlled by any corporation or other private entity and the source code is available free of charge.
+* [Node.js.](https://nodejs.org/en/)
+* [PostgreSQL](https://www.postgresql.org/)
 
 ## Project setup
 
-This project uses PostgresSQL as a database management system and Node.JS as a server-side. In order to run this project, first, you need to restore the information in the 'food_db.dump' to the database.
+Clone the repository
+```
+git clone https://github.com/sinakiaei/food-api.git
+```
 
-In order to do that, first, the food database needs to create in the PostgreSQL. This command, on the IDE terminal or windows command line, will create a food database.
+Navigate into the directory
+```
+cd food-api/
+```
 
+Create the database
 ```
 psql -h localhost -U postgres -c "CREATE DATABASE food;"
 ```
 
-By using this command all infromation will restore in database. 
-
+Load data into the database
 ```
 psql -h localhost -d food -U postgres < food_db.dump
 ```
 
-The following assumption for the food database considered in PostgreSQL. This information saved in  the '.env' file. If you have a different username or password, you need to tweak the '.env' file.
-
+Edit `.env` in the root directory to provide database connection information. Here is an example:
 ```
 DATABASE_USER='postgres'
 DATABASE_PASSWORD='postgres'
@@ -48,15 +40,39 @@ DATABASE_PORT='5432'
 DATABASE_NAME='food'
 ```
 
-After creating food database and restoring all information, we need to install the project by using:
-
+Install dependencies from package.json
 ```
 npm install
-```
-### Run 
+``` 
 
-At the end, you will be able to run the server by using the following command:
-
+Run the server
 ```
 npm start
 ```
+
+## API Endpoints
+### Initial Vaules
+* URL: /api/initial-values
+* Method: HTTP GET
+* Parameters: N/A
+* Success Reponse
+  * Code: HTTP 200
+  * Content: ```{
+"genders": ["Male", "Female"],
+"ages": ["2 to 3", "4 to 8", "9 to 13", "14 to 18", "19 to 30", "31 to 50", "51 to 70", "71+"]
+}```
+* Error Response
+  * Code: HTTP 500
+  * Content: throws an exception based on the nature of the error.
+### Recommentations
+* URL: /api/recommendations
+* Method: HTTP GET
+* Parameters
+  * ```age={"2 to 3", "4 to 8", "9 to 13", "14 to 18", "19 to 30", "31 to 50", "51 to 70", "71+"}```
+  * ```gender={Male, Female}```
+* Success Reponse
+  * Code: HTTP 200
+  * Content: returns food servings from different food groups and related recommendations based on age and gender, for example: ```{"servings": [...], "directions": [...]}```
+* Error Response
+  * Code: HTTP 500
+  * Content: throws an exception based on the nature of the error.
